@@ -2,14 +2,14 @@ import time
 
 from pyomo.environ import *
 from pyomo.dae import *
-from pdegas_automatic import model
+from pdegas import model
 
 start = time.time()
-instance = model.create_instance('pdegas_automatic.dat')
+instance = model.create_instance('pdegas.dat')
 
 # discretize model
 discretizer = TransformationFactory('dae.finite_difference')
-discretizer.apply_to(instance,nfe=100,wrt=instance.DIS,scheme='FORWARD')
+discretizer.apply_to(instance,nfe=1,wrt=instance.DIS,scheme='FORWARD')
 discretizer.apply_to(instance,nfe=47,wrt=instance.TIME,scheme='BACKWARD')
 
 # What it should be to match description in paper
@@ -38,7 +38,7 @@ def ssfcost_rule(m,k):
 instance.ssfcost = Expression(instance.SCEN,rule=ssfcost_rule)
 
 def cost_rule(m,k):
-    return 1e-6*(m.supcost[k] + m.boostcost[k] + m.trackcost[k] + m.sspcost[k] + m.ssfcost[k])   
+    return 1e-6*(m.supcost[k] + m.boostcost[k] + m.trackcost[k] + m.sspcost[k] + m.ssfcost[k])
 instance.cost = Expression(instance.SCEN,rule=cost_rule)
 
 def mcost_rule(m):
