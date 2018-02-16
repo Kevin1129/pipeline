@@ -68,7 +68,7 @@ for i in instance.SCEN:
 
 option = dict()
 option["print_level"] = 4
-option["linear_solver"]="MA97"
+option["linear_solver"]="MA57"
 solver=SolverFactory('ipopt')
 results = solver.solve(instance,options=option,tee=True)
 
@@ -77,3 +77,16 @@ for i in instance.SCEN:
         i, sum(sum(0.5*value(instance.pow[i,j,k])
                    for j in instance.LINK_A)
                for k in instance.TIME.get_finite_elements()) ))
+
+time = []
+s1 = []
+
+for t in instance.TIME:
+    time.append(t)
+    s1.append(value(instance.s[1,1,t]))
+import pylab
+pylab.plot(time,s1,'b',label='supplier1')
+pylab.title('supplier flowrate')
+pylab.xlabel('time')
+pylab.legend(loc='right')
+pylab.show()
