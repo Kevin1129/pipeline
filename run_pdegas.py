@@ -89,4 +89,6 @@ pylab.plot(time,s1,'b',label='supplier1')
 pylab.title('supplier flowrate')
 pylab.xlabel('time')
 pylab.legend(loc='right')
-pylab.show()
+pylab.savefig("supplier-time.jpg")
+
+#re_num = fx*Diameter/(viscosity*Area)
