@@ -45,9 +45,9 @@ def mcost_rule(m):
     return (1.0/m.S)*sum(m.cost[k] for k in m.SCEN)
 instance.mcost = Expression(rule=mcost_rule)
 
-def eqcvar_rule(m,k):
-    return m.cost[k] - m.nu <= m.phi[k];
-instance.eqcvar = Constraint(instance.SCEN,rule=eqcvar_rule)
+# def eqcvar_rule(m,k):
+#     return m.cost[k] - m.nu <= m.phi[k];
+# instance.eqcvar = Constraint(instance.SCEN,rule=eqcvar_rule)
 
 #def obj_rule(m):
 #    return (1.0-m.cvar_lambda)*m.mcost + m.cvar_lambda*m.cvarcost
@@ -79,16 +79,33 @@ for i in instance.SCEN:
                for k in instance.TIME.get_finite_elements()) ))
 
 time = []
+dis = []
 s1 = []
-
+f0 = []
+xdis = 0
 for t in instance.TIME:
     time.append(t)
     s1.append(value(instance.s[1,1,t]))
-import pylab
-pylab.plot(time,s1,'b',label='supplier1')
-pylab.title('supplier flowrate')
-pylab.xlabel('time')
-pylab.legend(loc='right')
-pylab.savefig("supplier-time.jpg")
 
-#re_num = fx*Diameter/(viscosity*Area)
+for line in instance.LINK:
+    length = value(instance.llength[line])
+    for x in instance.DIS:
+        xdis = xdis + length*value(x)
+        dis.append(xdis)
+        f0.append(value(instance.fx[1,line,24,x]))
+
+
+# import pylab
+# pylab.plot(time,s1,'b',label='supplier1')
+# pylab.title('supplier flowrate')
+# pylab.xlabel('time')
+# pylab.legend(loc='right')
+# pylab.savefig("supplier-time.jpg")
+
+# import matplotlib.pyplot as plt
+# plt.figure(1)
+# plt.subplot(111)
+# plt.plot(dis,f0)
+# plt.title('flowrate vs distance')
+# plt.xlabel('distance')
+# plt.savefig("flowrate-distance.jpg")

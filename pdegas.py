@@ -187,14 +187,14 @@ def powereq_rule(m,j,i,t):
 model.powereq = Constraint(model.SCEN,model.LINK_A,model.TIME,rule=powereq_rule)
 
 # cvar model
-model.cvar_lambda = Param(within=NonNegativeReals)
-model.nu = Var(initialize=100.0)
-model.phi = Var(model.SCEN,bounds=(0.0,None),initialize=100.0)
+# model.cvar_lambda = Param(within=NonNegativeReals)
+# model.nu = Var(initialize=100.0)
+# model.phi = Var(model.SCEN,bounds=(0.0,None),initialize=100.0)
 
 
-def cvarcost_rule(m):
-    return (1.0/m.S)*sum((m.phi[k]/(1.0-0.95) + m.nu) for k in m.SCEN)
-model.cvarcost = Expression(rule=cvarcost_rule)
+# def cvarcost_rule(m):
+#     return (1.0/m.S)*sum((m.phi[k]/(1.0-0.95) + m.nu) for k in m.SCEN)
+# model.cvarcost = Expression(rule=cvarcost_rule)
 
 # node balances
 def nodeeq_rule(m,k,i,t):
@@ -275,20 +275,20 @@ def pres_ss_rule(m,j,i,k):
 model.pres_ss = Constraint(model.SCEN,model.LINK,model.DIS,rule=pres_ss_rule)
 
 # non-anticipativity constraints
-def nonantdq_rule(m,j,i,t):
-    if j == 1:
-        return Constraint.Skip
-    if t >= m.TDEC+1:
-        return Constraint.Skip
-    return m.dp[j,i,t] == m.dp[1,i,t]
+# def nonantdq_rule(m,j,i,t):
+#     if j == 1:
+#         return Constraint.Skip
+#     if t >= m.TDEC+1:
+#         return Constraint.Skip
+#     return m.dp[j,i,t] == m.dp[1,i,t]
+#
+# model.nonantdq = Constraint(model.SCEN,model.LINK_A,model.TIME,rule=nonantdq_rule)
 
-model.nonantdq = Constraint(model.SCEN,model.LINK_A,model.TIME,rule=nonantdq_rule)
-
-def nonantde_rule(m,j,i,t):
-    if j == 1:
-        return Constraint.Skip
-    if t >= m.TDEC+1:
-        return Constraint.Skip
-    return m.dem[j,i,t] == m.dem[1,i,t]
-
-model.nonantde = Constraint(model.SCEN,model.DEM,model.TIME,rule=nonantde_rule)
+# def nonantde_rule(m,j,i,t):
+#     if j == 1:
+#         return Constraint.Skip
+#     if t >= m.TDEC+1:
+#         return Constraint.Skip
+#     return m.dem[j,i,t] == m.dem[1,i,t]
+#
+# model.nonantde = Constraint(model.SCEN,model.DEM,model.TIME,rule=nonantde_rule)
