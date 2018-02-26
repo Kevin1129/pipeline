@@ -95,17 +95,23 @@ for line in instance.LINK:
         f0.append(value(instance.fx[1,line,24,x]))
 
 
-# import pylab
-# pylab.plot(time,s1,'b',label='supplier1')
-# pylab.title('supplier flowrate')
-# pylab.xlabel('time')
-# pylab.legend(loc='right')
-# pylab.savefig("supplier-time.jpg")
+time = []
+dem4 = []
+stochd4 = []
 
-# import matplotlib.pyplot as plt
-# plt.figure(1)
-# plt.subplot(111)
-# plt.plot(dis,f0)
-# plt.title('flowrate vs distance')
-# plt.xlabel('distance')
-# plt.savefig("flowrate-distance.jpg")
+
+for t in instance.TIME:
+    time.append(t)
+    dem4.append(value(instance.dem[1,1,t]))
+    stochd4.append(value(instance.stochd[1,1,t]))
+
+import matplotlib.pyplot as plt
+plt.figure(1)
+plt.subplot(111)
+plt.title('supplier_flowrate vs time')
+plt.xlabel('time/h')
+plt.ylabel('flowrate/(10x10^4scm/day)')
+dem_line, = plt.plot(time,dem4,'b',label="demand")
+stochd_line, = plt.plot(time,stochd4,'r',label="stochd")
+plt.legend([dem_line,stochd_line],["demand","stochd"])
+plt.savefig('demand VS stochd')
